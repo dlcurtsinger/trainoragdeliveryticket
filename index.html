@@ -358,22 +358,46 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
 .dropdown::-webkit-scrollbar-thumb { background: var(--gray-light); border-radius: 3px; }
 
 @media print {
+  @page { margin: 0.45in; size: letter portrait; }
+
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
   body * { visibility: hidden; }
   #ticketPreview, #ticketPreview * { visibility: visible; }
+
   #ticketPreview {
     position: fixed;
     top: 0; left: 0;
     width: 100%;
-    min-height: 100vh;
-    padding: 20px 24px;
+    padding: 16px 20px;
     box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
+    background: white !important;
   }
-  #ticketPreview .ticket-sig {
-    margin-top: auto !important;
-    padding-top: 18px !important;
-  }
+
+  /* Keep the logo area white so JPEG background blends in */
+  .ticket-top { background: white !important; }
+
+  /* Scale down fonts slightly to help fit on one page */
+  .ticket-company { font-size: 20px !important; }
+  .ticket-val { font-size: 16px !important; }
+  .ticket-table th, .ticket-table td { padding: 7px 9px !important; font-size: 12px !important; }
+
+  /* Prevent awkward page breaks */
+  .ticket-section { page-break-inside: avoid; }
+  .ticket-sig { page-break-inside: avoid; margin-top: 16px !important; padding-top: 14px !important; }
+
+  /* Ensure table header colors print */
+  .ticket-table th { background: #1a3a2a !important; color: white !important; }
+  .ticket-table tr:nth-child(even) td { background: #f9f9f9 !important; }
+  .ticket-table tr.new-row td { background: #fff3dc !important; }
+
+  /* Ensure ticket number is always visible */
+  .ticket-num-big { color: #d4860a !important; font-size: 18px !important; }
+
+  /* Hide buttons */
   #ticketPreview button,
   #ticketPreview .btn-modal-close,
   #ticketPreview .modal-actions { display: none !important; }
