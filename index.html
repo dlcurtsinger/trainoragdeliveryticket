@@ -358,45 +358,79 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
 .dropdown::-webkit-scrollbar-thumb { background: var(--gray-light); border-radius: 3px; }
 
 @media print {
-  @page { margin: 0.45in; size: letter portrait; }
+  @page { margin: 0.5in; size: letter portrait; }
 
   * {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
 
-  body * { visibility: hidden; }
-  #ticketPreview, #ticketPreview * { visibility: visible; }
-
-  #ticketPreview {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%;
-    padding: 16px 20px;
-    box-sizing: border-box;
+  /* Hide everything at body level, then selectively show the modal */
+  body {
     background: white !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  body > * { display: none !important; }
+
+  /* Show only the ticket modal */
+  #ticketModal { display: block !important; }
+
+  /* Flatten the modal overlay — no dark backdrop, no centering */
+  .modal-overlay {
+    position: static !important;
+    background: none !important;
+    padding: 0 !important;
+    display: block !important;
   }
 
-  /* Keep the logo area white so JPEG background blends in */
+  /* Strip modal chrome */
+  .modal {
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  .modal-header  { display: none !important; }
+  .modal-actions { display: none !important; }
+
+  /* Make modal body fill the printable page height as a flex column */
+  .modal-body {
+    padding: 0 !important;
+    overflow: visible !important;
+    max-height: none !important;
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: calc(100vh - 1in) !important; /* page height minus top+bottom margins */
+  }
+
+  /* Ticket preview fills remaining flex space */
+  #ticketPreview {
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    background: white !important;
+    padding: 0 !important;
+  }
+
+  /* Keep the logo area white */
   .ticket-top { background: white !important; }
 
-  /* Scale down fonts slightly to help fit on one page */
+  /* Scale down fonts slightly */
   .ticket-company { font-size: 20px !important; }
-  .ticket-val { font-size: 16px !important; }
+  .ticket-val     { font-size: 16px !important; }
   .ticket-table th, .ticket-table td { padding: 7px 9px !important; font-size: 12px !important; }
 
   /* Prevent awkward page breaks */
   .ticket-section { page-break-inside: avoid; }
 
-  /* Pin signature block to bottom of printed page */
+  /* Push signature to bottom of the flex column */
   .ticket-sig {
-    position: fixed !important;
-    bottom: 0.45in !important;
-    left: 0.45in !important;
-    right: 0.45in !important;
-    margin: 0 !important;
+    margin-top: auto !important;
     padding-top: 14px !important;
-    background: white !important;
     border-top: 2px solid #333 !important;
   }
 
@@ -405,13 +439,8 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
   .ticket-table tr:nth-child(even) td { background: #f9f9f9 !important; }
   .ticket-table tr.new-row td { background: #fff3dc !important; }
 
-  /* Ensure ticket number is always visible */
+  /* Ticket number color */
   .ticket-num-big { color: #d4860a !important; font-size: 18px !important; }
-
-  /* Hide buttons */
-  #ticketPreview button,
-  #ticketPreview .btn-modal-close,
-  #ticketPreview .modal-actions { display: none !important; }
 }
 
 /* ── SETTINGS TAB ── */
